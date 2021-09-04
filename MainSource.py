@@ -1,7 +1,7 @@
 import requests, json, xmltodict
 
 key = input('API 키 입력 : ')
-inputstr = input('고등학교 입력 : ')
+inputstr = input('학교 입력 : ')
 
 url = 'https://open.neis.go.kr/hub/schoolInfo?Type=xml&pIndex=1&pSize=100&' + key + '&' + 'SCHUL_NM=' + inputstr
 
