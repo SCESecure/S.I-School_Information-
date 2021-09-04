@@ -1,4 +1,6 @@
-import requests, json, xmltodict
+import requests
+import xmltodict
+import json
 
 print('[S.I(School Information)]')
 print('<본 프로그램은 API 키가 필요합니다. ("https://open.neis.go.kr/portal/mainPage.do"에서 발급 받을 수 있습니다.)>')
@@ -6,17 +8,20 @@ print('<본 프로그램은 API 키가 필요합니다. ("https://open.neis.go.k
 key = input('API 키 입력 : ')
 inputstr = input('학교 입력 : ')
 
-url = 'https://open.neis.go.kr/hub/schoolInfo?Type=xml&pIndex=1&pSize=100&' + key + '&' + 'SCHUL_NM=' + inputstr
+url = 'https://open.neis.go.kr/hub/schoolInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key + '&SCHUL_NM=' + inputstr
 
 content = requests.get(url).content
 dict = xmltodict.parse(content)
-jsonString = json.dumps(dict['schoolInfo']['row'], ensure_ascii=False)
-jsonObj = json.loads(jsonString)
+tjsonString = json.dumps(dict['schoolInfo']['head'], ensure_ascii=False)
+tjsonObj = json.loads(tjsonString)
 
-if len(jsonObj) > 1 :
+if tjsonObj['list_total_count'] > '1' :
     print('여러개의 학교가 감지되었습니다. 이름을 구체적으로 입력하여 주십시오.')
 
     exit()
+
+jsonString = json.dumps(dict['schoolInfo']['row'], ensure_ascii=False)
+jsonObj = json.loads(jsonString)
 
 atpt_ofcdc_sc_code = jsonObj['ATPT_OFCDC_SC_CODE']
 atpt_ofcdc_sc_nm = jsonObj['ATPT_OFCDC_SC_NM']
@@ -81,6 +86,11 @@ if maininput == '1' :
     exit()
 
 elif maininput == '2' :
-    print('')
+    mlsv_ymd = input('급식 일자를 입력하여 주시길 바랍니다')
+    furl = 'https://open.neis.go.kr/hub/mealServiceDietInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key + '&SCHUL_NM=' + schul_nm \
+        + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&MLSV_YMD=' + mlsv_ymd
+    
+    fcontent = requests.get(furl).content
+    
 else :
     print('주어진 번호를 입력해주세요')
