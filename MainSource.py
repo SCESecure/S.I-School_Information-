@@ -2,8 +2,8 @@ import requests
 import xmltodict
 import json
 
-print('[S.I(School Information)]')
-print('<본 프로그램은 API 키가 필요합니다. ("https://open.neis.go.kr/portal/mainPage.do"에서 발급 받을 수 있습니다.)>')
+print('[S.I(School Information)]\n')
+print('<본 프로그램은 API 키가 필요합니다. (나이스 교육정보 개방 포털에서 발급 받을 수 있습니다.)>')
 
 key = input('API 키 입력 : ')
 inputstr = input('학교 입력 : ')
@@ -16,7 +16,7 @@ tjsonString = json.dumps(dict['schoolInfo']['head'], ensure_ascii=False)
 tjsonObj = json.loads(tjsonString)
 
 if tjsonObj['list_total_count'] > '1' :
-    print('여러개의 학교가 감지되었습니다. 이름을 구체적으로 입력하여 주십시오.')
+    print('\n여러개의 학교가 감지되었습니다. 이름을 구체적으로 입력하여 주십시오.')
 
     exit()
 
@@ -49,14 +49,13 @@ fond_ymd = jsonObj['FOND_YMD']
 foas_memrd = jsonObj['FOAS_MEMRD']
 load_dtm = jsonObj['LOAD_DTM']
 
-print('어떤 기능을 사용하시겠습니까?')
+print('\n어떤 기능을 사용하시겠습니까?')
 print('1. 학교 기본 정보')
 print('2. 급식 식단 정보')
 maininput = input('입력 : ')
 
 if maininput == '1' :
-    print(schul_nm + '의 기본적인 정보는 다음과 같습니다.')
-    print('')
+    print(schul_nm + '의 기본적인 정보는 다음과 같습니다.\n')
     print('시도교육청코드 : ' + atpt_ofcdc_sc_code)
     print('시도교육청명 : ' + atpt_ofcdc_sc_nm)
     print('표준학교코드 : ' + sd_schul_code)
@@ -86,11 +85,24 @@ if maininput == '1' :
     exit()
 
 elif maininput == '2' :
-    mlsv_ymd = input('급식 일자를 입력하여 주시길 바랍니다')
-    furl = 'https://open.neis.go.kr/hub/mealServiceDietInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key + '&SCHUL_NM=' + schul_nm \
+    print('\n\n')
+    mlsv_ymd = input('급식 일자 입력 : ')
+    furl = 'https://open.neis.go.kr/hub/mealServiceDietInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
         + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&MLSV_YMD=' + mlsv_ymd
     
     fcontent = requests.get(furl).content
+    fdict = xmltodict.parse(fcontent)
+    fjsonString = json.dumps(fdict['mealServiceDietInfo']['row'], ensure_ascii=False)
+    fjsonObj = json.loads(fjsonString)
     
+    print('\n' + schul_nm + '의 ' + mlsv_ymd + '일자 식단표는 다음과 같습니다.')
+    fjsonObj['DDISH_NM'] = fjsonObj['DDISH_NM'].replace("<br/>", "\n")
+    
+    print(fjsonObj['DDISH_NM'])
+    
+    exit()
+
 else :
     print('주어진 번호를 입력해주세요')
+
+    exit()
