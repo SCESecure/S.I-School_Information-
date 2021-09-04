@@ -1,5 +1,8 @@
 import requests, json, xmltodict
 
+print('[S.I(School Information)]')
+print('<본 프로그램은 API 키가 필요합니다. ("https://open.neis.go.kr/portal/mainPage.do"에서 발급 받을 수 있습니다.)>')
+
 key = input('API 키 입력 : ')
 inputstr = input('학교 입력 : ')
 
