@@ -31,7 +31,7 @@ except KeyError :
     ejsonObj = json.loads(ejsonString)
 
     print(ejsonObj['MESSAGE'])
-    
+
     exit()
 
 jsonString = json.dumps(dict['schoolInfo']['row'], ensure_ascii=False)
@@ -103,12 +103,19 @@ elif maininput == '2' :
     mlsv_ymd = input('급식 일자 입력 : ')
     furl = 'https://open.neis.go.kr/hub/mealServiceDietInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
         + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&MLSV_YMD=' + mlsv_ymd
-    
-    fcontent = requests.get(furl).content
-    fdict = xmltodict.parse(fcontent)
-    fjsonString = json.dumps(fdict['mealServiceDietInfo']['row'], ensure_ascii=False)
-    fjsonObj = json.loads(fjsonString)
-    
+    try :
+        fcontent = requests.get(furl).content
+        fdict = xmltodict.parse(fcontent)
+        fjsonString = json.dumps(fdict['mealServiceDietInfo']['row'], ensure_ascii=False)
+        fjsonObj = json.loads(fjsonString)
+    except KeyError :
+        fejsonString = json.dumps(fdict['RESULT'], ensure_ascii=False)
+        fejsonObj = json.loads(fejsonString)
+
+        print(fejsonObj['MESSAGE'])
+        
+        exit()
+
     print('\n' + schul_nm + '의 ' + mlsv_ymd + '일자 식단표는 다음과 같습니다.')
     fjsonObj['DDISH_NM'] = fjsonObj['DDISH_NM'].replace("<br/>", "\n")
     
