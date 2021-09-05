@@ -100,7 +100,7 @@ if maininput == '1' :
 
 elif maininput == '2' :
     print('\n\n')
-    mlsv_ymd = input('급식 일자 입력 : ')
+    mlsv_ymd = input('급식 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
     furl = 'https://open.neis.go.kr/hub/mealServiceDietInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
         + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&MLSV_YMD=' + mlsv_ymd
     try :
