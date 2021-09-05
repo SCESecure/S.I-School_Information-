@@ -30,7 +30,7 @@ except KeyError :
     ejsonString = json.dumps(dict['RESULT'], ensure_ascii=False)
     ejsonObj = json.loads(ejsonString)
 
-    print(ejsonObj['MESSAGE'])
+    print('\n' + ejsonObj['MESSAGE'])
 
     exit()
 
@@ -114,7 +114,7 @@ elif maininput == '2' :
         fejsonString = json.dumps(fdict['RESULT'], ensure_ascii=False)
         fejsonObj = json.loads(fejsonString)
 
-        print(fejsonObj['MESSAGE'])
+        print('\n' + fejsonObj['MESSAGE'])
 
         exit()
 
@@ -144,7 +144,7 @@ elif maininput == '3' :
         acjsonString = json.dumps(acdict['RESULT'])
         acjsonObj = json.loads(acjsonString)
 
-        print(acjsonObj['MESSAGE'])
+        print('\n' + acjsonObj['MESSAGE'])
 
         exit()
 
