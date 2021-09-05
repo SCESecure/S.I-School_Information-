@@ -12,12 +12,26 @@ url = 'https://open.neis.go.kr/hub/schoolInfo' + '?' + 'Type=xml&pIndex=1&pSize=
 
 content = requests.get(url).content
 dict = xmltodict.parse(content)
-tjsonString = json.dumps(dict['schoolInfo']['head'], ensure_ascii=False)
-tjsonObj = json.loads(tjsonString)
 
-if tjsonObj['list_total_count'] > '1' :
-    print('\n여러개의 학교가 감지되었습니다. 이름을 구체적으로 입력하여 주십시오.')
+try :
+    tjsonString = json.dumps(dict['schoolInfo']['head'], ensure_ascii=False)
+    tjsonObj = json.loads(tjsonString) 
 
+    if tjsonObj['list_total_count'] > '1' :
+        print('\n여러개의 학교가 감지되었습니다. 이름을 구체적으로 입력하여 주십시오.')
+
+        exit()
+    elif tjsonObj['RESULT']['CODE'] != 'INFO-000' :
+        print('\n' + tjsonObj['RESULT']['MESSAGE'])
+
+        exit()
+
+except KeyError :
+    ejsonString = json.dumps(dict['RESULT'], ensure_ascii=False)
+    ejsonObj = json.loads(ejsonString)
+
+    print(ejsonObj['MESSAGE'])
+    
     exit()
 
 jsonString = json.dumps(dict['schoolInfo']['row'], ensure_ascii=False)
