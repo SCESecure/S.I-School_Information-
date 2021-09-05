@@ -70,7 +70,7 @@ print('3. 학사 일정')
 maininput = input('입력 : ')
 
 if maininput == '1' :
-    print(schul_nm + '의 기본적인 정보는 다음과 같습니다.\n')
+    print('\n\n' + schul_nm + '의 기본적인 정보는 다음과 같습니다.\n')
     print('시도교육청코드 : ' + atpt_ofcdc_sc_code)
     print('시도교육청명 : ' + atpt_ofcdc_sc_nm)
     print('표준학교코드 : ' + sd_schul_code)
