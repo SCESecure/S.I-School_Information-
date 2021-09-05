@@ -63,9 +63,10 @@ fond_ymd = jsonObj['FOND_YMD']
 foas_memrd = jsonObj['FOAS_MEMRD']
 load_dtm = jsonObj['LOAD_DTM']
 
-print('\n어떤 기능을 사용하시겠습니까?')
+print('\n어떤 기능을 사용하시겠습니까?\n')
 print('1. 학교 기본 정보')
 print('2. 급식 식단 정보')
+print('3. 학사 일정')
 maininput = input('입력 : ')
 
 if maininput == '1' :
