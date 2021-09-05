@@ -12,11 +12,25 @@ url = 'https://open.neis.go.kr/hub/schoolInfo' + '?' + 'Type=xml&pIndex=1&pSize=
 
 content = requests.get(url).content
 dict = xmltodict.parse(content)
-tjsonString = json.dumps(dict['schoolInfo']['head'], ensure_ascii=False)
-tjsonObj = json.loads(tjsonString)
 
-if tjsonObj['list_total_count'] > '1' :
-    print('\n여러개의 학교가 감지되었습니다. 이름을 구체적으로 입력하여 주십시오.')
+try :
+    tjsonString = json.dumps(dict['schoolInfo']['head'], ensure_ascii=False)
+    tjsonObj = json.loads(tjsonString) 
+
+    if tjsonObj['list_total_count'] > '1' :
+        print('\n여러개의 학교가 감지되었습니다. 이름을 구체적으로 입력하여 주십시오.')
+
+        exit()
+    elif tjsonObj['RESULT']['CODE'] != 'INFO-000' :
+        print('\n' + tjsonObj['RESULT']['MESSAGE'])
+
+        exit()
+
+except KeyError :
+    ejsonString = json.dumps(dict['RESULT'], ensure_ascii=False)
+    ejsonObj = json.loads(ejsonString)
+
+    print('\n' + ejsonObj['MESSAGE'])
 
     exit()
 
@@ -49,13 +63,14 @@ fond_ymd = jsonObj['FOND_YMD']
 foas_memrd = jsonObj['FOAS_MEMRD']
 load_dtm = jsonObj['LOAD_DTM']
 
-print('\n어떤 기능을 사용하시겠습니까?')
+print('\n어떤 기능을 사용하시겠습니까?\n')
 print('1. 학교 기본 정보')
 print('2. 급식 식단 정보')
+print('3. 학사 일정')
 maininput = input('입력 : ')
 
 if maininput == '1' :
-    print(schul_nm + '의 기본적인 정보는 다음과 같습니다.\n')
+    print('\n\n' + schul_nm + '의 기본적인 정보는 다음과 같습니다.\n')
     print('시도교육청코드 : ' + atpt_ofcdc_sc_code)
     print('시도교육청명 : ' + atpt_ofcdc_sc_nm)
     print('표준학교코드 : ' + sd_schul_code)
@@ -86,20 +101,59 @@ if maininput == '1' :
 
 elif maininput == '2' :
     print('\n\n')
-    mlsv_ymd = input('급식 일자 입력 : ')
+    mlsv_ymd = input('급식 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
     furl = 'https://open.neis.go.kr/hub/mealServiceDietInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
         + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&MLSV_YMD=' + mlsv_ymd
-    
-    fcontent = requests.get(furl).content
-    fdict = xmltodict.parse(fcontent)
-    fjsonString = json.dumps(fdict['mealServiceDietInfo']['row'], ensure_ascii=False)
-    fjsonObj = json.loads(fjsonString)
-    
+
+    try :
+        fcontent = requests.get(furl).content
+        fdict = xmltodict.parse(fcontent)
+        fjsonString = json.dumps(fdict['mealServiceDietInfo']['row'], ensure_ascii=False)
+        fjsonObj = json.loads(fjsonString)
+
+    except KeyError :
+        fejsonString = json.dumps(fdict['RESULT'], ensure_ascii=False)
+        fejsonObj = json.loads(fejsonString)
+
+        print('\n' + fejsonObj['MESSAGE'])
+
+        exit()
+
     print('\n' + schul_nm + '의 ' + mlsv_ymd + '일자 식단표는 다음과 같습니다.')
     fjsonObj['DDISH_NM'] = fjsonObj['DDISH_NM'].replace("<br/>", "\n")
-    
+
     print(fjsonObj['DDISH_NM'])
-    
+
+    exit()
+
+elif maininput == '3' :
+    print('\n\n')
+    aa_from_ymd = input('학사 시작 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
+    aa_to_ymd = input('학사 종료 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
+
+    acurl = 'https://open.neis.go.kr/hub/SchoolSchedule' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
+        + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&AA_FROM_YMD=' + aa_from_ymd \
+        + '&AA_TO_YMD=' + aa_to_ymd
+
+    try :
+        accontent = requests.get(acurl).content
+        acdict = xmltodict.parse(accontent)
+        acjsonString = json.dumps(acdict['SchoolSchedule']['row'])
+        acjsonObj = json.loads(acjsonString)
+
+    except KeyError :
+        acjsonString = json.dumps(acdict['RESULT'])
+        acjsonObj = json.loads(acjsonString)
+
+        print('\n' + acjsonObj['MESSAGE'])
+
+        exit()
+
+    print('\n' + schul_nm + '의 학사 일정은 다음과 같습니다. (기간 : ' + aa_from_ymd + ' ~ ' + aa_to_ymd + ')\n')
+
+    for output in acjsonObj :
+        print(output['AA_YMD'] + ' : ' + output['EVENT_NM'] + '[' + output['SBTR_DD_SC_NM'] + ']')
+
     exit()
 
 else :
