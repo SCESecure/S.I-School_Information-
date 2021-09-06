@@ -12,7 +12,7 @@ f = open(path3, mode='r', encoding='utf-8')
 isactive = f.readline()
 
 if isactive == 'deactive' :
-    print('\n\n[기본적인 파일이 존재하지 않습니다. 셋업 프로그램을 실행한 후 본 프로그램을 실행 바랍니다.]\n\n')
+    print('\n\n[셋업 프로그램에서 입력한 정보들이 존재하지 않습니다. 셋업 프로그램을 실행한 후 본 프로그램을 실행 바랍니다.]\n\n')
 
     exit()
 
