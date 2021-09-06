@@ -8,8 +8,10 @@ print('(주의 : 대학교는 지원이 되지 않습니다.)')
 
 key = input('API 키 입력 : ')
 inputstr = input('학교 입력 : ')
+atpt = input('시도교육청코드 입력 (중복되는 경우만 해당, 아닐시 무시) : ')
 
-url = 'https://open.neis.go.kr/hub/schoolInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key + '&SCHUL_NM=' + inputstr
+url = 'https://open.neis.go.kr/hub/schoolInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
+     + '&SCHUL_NM=' + inputstr + '&ATPT_OFCDC_SC_CODE=' + atpt
 
 content = requests.get(url).content
 dict = xmltodict.parse(content)
@@ -19,7 +21,7 @@ try :
     tjsonObj = json.loads(tjsonString)
 
     if tjsonObj['list_total_count'] > '1' :
-        print('\n여러개의 학교가 감지되었습니다. 시도교육청코드를 처음 실행시 입력 바랍니다.\n')
+        print('\n' + tjsonObj['list_total_count'] + '개의 학교가 감지되었습니다. 해당하는 시도교육청코드를 처음 실행시 입력 바랍니다.\n')
 
         tjsonString = json.dumps(dict['schoolInfo']['row'])
         tjsonObj = json.loads(tjsonString)
