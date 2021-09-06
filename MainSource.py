@@ -4,6 +4,7 @@ import json
 
 print('[S.I(School Information)]\n')
 print('<본 프로그램은 API 키가 필요합니다. (나이스 교육정보 개방 포털에서 발급 받을 수 있습니다.)>')
+print('(주의 : 대학교는 지원이 되지 않습니다.)')
 
 key = input('API 키 입력 : ')
 inputstr = input('학교 입력 : ')
