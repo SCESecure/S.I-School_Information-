@@ -19,7 +19,13 @@ try :
     tjsonObj = json.loads(tjsonString)
 
     if tjsonObj['list_total_count'] > '1' :
-        print('\n여러개의 학교가 감지되었습니다. 이름을 구체적으로 입력하여 주십시오.')
+        print('\n여러개의 학교가 감지되었습니다. 시도교육청코드를 처음 실행시 입력 바랍니다.\n')
+
+        tjsonString = json.dumps(dict['schoolInfo']['row'])
+        tjsonObj = json.loads(tjsonString)
+
+        for output in tjsonObj :
+            print(output['ATPT_OFCDC_SC_NM'] + ' : ' + output['ATPT_OFCDC_SC_CODE'])
 
         exit()
     elif tjsonObj['RESULT']['CODE'] != 'INFO-000' :
