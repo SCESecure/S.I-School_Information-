@@ -4,7 +4,7 @@ import requests
 import xmltodict
 import json
 
-path = os.getcwd() + '\\setup\\setup\\basicfile.txt'
+path = os.getcwd() + '\\basicfile.txt'
 
 if os.path.isfile(path) == False :
     print('\n\n[기본적인 파일이 존재하지 않습니다. 셋업 프로그램을 실행한 후 본 프로그램을 실행 바랍니다.]\n\n')
