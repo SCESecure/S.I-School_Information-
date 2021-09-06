@@ -180,8 +180,10 @@ elif maininput == '4' :
     tijsonString = json.dumps(tidict['hisTimetable']['row'])
     tijsonObj = json.loads(tijsonString)
 
+    print('\n' + schul_nm + '의 ' + all_ti_ymd + '일자 시간표는 다음과 같습니다.')
+    print('(제 ' + ay + '학년도 ' + sem + '학기 ' + grade + '학년 ' + class_nm + '반 시간표)\n')
     for tioutput in tijsonObj :
-        print(tioutput)
+        print(tioutput['PERIO'] + '교시 : ' + tioutput['ITRT_CNTNT'])
 
 else :
     print('주어진 번호를 입력해주세요')
