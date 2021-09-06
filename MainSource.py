@@ -129,7 +129,7 @@ elif maininput == '2' :
 
         exit()
 
-    print('\n' + schul_nm + '의 ' + mlsv_ymd + '일자 식단표는 다음과 같습니다.')
+    print('\n' + schul_nm + '의 ' + mlsv_ymd + '일자 식단표는 다음과 같습니다.\n')
     fjsonObj['DDISH_NM'] = fjsonObj['DDISH_NM'].replace("<br/>", "\n")
 
     print(fjsonObj['DDISH_NM'])
