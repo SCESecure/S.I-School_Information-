@@ -153,41 +153,35 @@ elif maininput == '3' :
 
     print('\n' + schul_nm + '의 학사 일정은 다음과 같습니다. (기간 : ' + aa_from_ymd + ' ~ ' + aa_to_ymd + ')\n')
 
-    for output in acjsonObj :
-        print(output['AA_YMD'] + ' : ' + output['EVENT_NM'] + '[' + output['SBTR_DD_SC_NM'] + ']')
+    for acoutput in acjsonObj :
+        print(acoutput['AA_YMD'] + ' : ' + acoutput['EVENT_NM'] + '[' + acoutput['SBTR_DD_SC_NM'] + ']')
 
     exit()
 
 elif maininput == '4' :
     print('\n\n')
-    aa_from_ymd = input('학사 시작 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
-    aa_to_ymd = input('학사 종료 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
+    print('<기간 입력>\n')
+    all_ti_ymd = input('시간표 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
 
-    acurl = 'https://open.neis.go.kr/hub/SchoolSchedule' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
-        + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&AA_FROM_YMD=' + aa_from_ymd \
-        + '&AA_TO_YMD=' + aa_to_ymd
+    print('\n')
+    print('<상세 입력>\n')
+    print('[숫자만 입력 바랍니다.]\n')
+    ay = input('학년도 입력 : ')
+    sem = input('학기 입력 : ')
+    grade = input('학년 입력 : ')
+    class_nm = input('반 입력 : ')
 
-    try :
-        accontent = requests.get(acurl).content
-        acdict = xmltodict.parse(accontent)
-        acjsonString = json.dumps(acdict['SchoolSchedule']['row'])
-        acjsonObj = json.loads(acjsonString)
+    tiurl = 'https://open.neis.go.kr/hub/hisTimetable' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
+        + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&ALL_TI_YMD=' + all_ti_ymd \
+        + '&AY=' + ay + '&SEM=' + sem + '&GRADE=' + grade + '&CLASS_NM=' + class_nm
 
-    except KeyError :
-        acjsonString = json.dumps(acdict['RESULT'])
-        acjsonObj = json.loads(acjsonString)
+    ticontent = requests.get(tiurl).content
+    tidict = xmltodict.parse(ticontent)
+    tijsonString = json.dumps(tidict['hisTimetable']['row'])
+    tijsonObj = json.loads(tijsonString)
 
-        print('\n' + acjsonObj['MESSAGE'])
-
-        exit()
-
-    print('\n' + schul_nm + '의 학사 일정은 다음과 같습니다. (기간 : ' + aa_from_ymd + ' ~ ' + aa_to_ymd + ')\n')
-
-    for output in acjsonObj :
-        print(output['AA_YMD'] + ' : ' + output['EVENT_NM'] + '[' + output['SBTR_DD_SC_NM'] + ']')
-
-    exit()
-
+    for tioutput in tijsonObj :
+        print(tioutput)
 
 else :
     print('주어진 번호를 입력해주세요')
