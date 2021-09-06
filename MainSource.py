@@ -6,14 +6,18 @@ import json
 
 path1 = os.getcwd() + '\\basicfile.txt'
 path2 = os.getcwd() + '\\schoolfile.txt'
+path3 = os.getcwd() + '\\isactive.txt'
 
-if os.path.isfile(path1) == False or os.path.isfile(path2) == False :
+f = open(path3, mode='r', encoding='utf-8')
+isactive = f.readline()
+
+if isactive == 'deactive' :
     print('\n\n[기본적인 파일이 존재하지 않습니다. 셋업 프로그램을 실행한 후 본 프로그램을 실행 바랍니다.]\n\n')
 
     exit()
 
 print('[S.I(School Information)]\n')
-print('<본 프로그램은 기본적인 파일을 바탕으로 실행됩니다. 만약 수정을 원할시 셋업 프로그램을 실행바랍니다.>')
+print('<본 프로그램은 셋업 프로그램에서 입력한 정보들을 바탕으로 실행됩니다. 만약 수정을 원할시 셋업 프로그램을 실행바랍니다.>')
 print('(주의 : 대학교는 지원이 되지 않습니다.)\n')
 
 f = open(path1, mode='r', encoding='utf-8')

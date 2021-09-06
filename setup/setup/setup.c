@@ -38,6 +38,10 @@ int main() {
 	fputs("\n", fs2);
 	fclose(fs2);
 
+	FILE* fs3 = fopen("isactive.txt", "w");
+	fputs("active", fs3);
+	fclose(fs3);
+
 	printf("\n셋업 과정을 완료했습니다. 이제 이 프로그램은 종료하셔도 좋습니다. (아무 키 입력)\n");
 
 	key = _getch();
