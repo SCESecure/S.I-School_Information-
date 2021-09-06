@@ -1,24 +1,58 @@
+import os
+import os.path
 import requests
 import xmltodict
 import json
 
+path1 = os.getcwd() + '\\basicfile.txt'
+path2 = os.getcwd() + '\\schoolfile.txt'
+path3 = os.getcwd() + '\\isactive.txt'
+
+f = open(path3, mode='r', encoding='utf-8')
+isactive = f.readline()
+
+if isactive == 'deactive' :
+    print('\n\n[셋업 프로그램에서 입력한 정보들이 존재하지 않습니다. 셋업 프로그램을 실행한 후 본 프로그램을 실행 바랍니다.]\n\n')
+
+    exit()
+
 print('[S.I(School Information)]\n')
-print('<본 프로그램은 API 키가 필요합니다. (나이스 교육정보 개방 포털에서 발급 받을 수 있습니다.)>')
+print('<본 프로그램은 셋업 프로그램에서 입력한 정보들을 바탕으로 실행됩니다. 만약 수정을 원할시 셋업 프로그램을 실행바랍니다.>')
+print('(주의 : 대학교는 지원이 되지 않습니다.)\n')
 
-key = input('API 키 입력 : ')
-inputstr = input('학교 입력 : ')
+f = open(path1, mode='r', encoding='utf-8')
+fkey = f.readline()
+fatpt = f.readline()
 
-url = 'https://open.neis.go.kr/hub/schoolInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key + '&SCHUL_NM=' + inputstr
+f = open(path2, mode='r', encoding='cp949')
+finputstr = f.readline()
+
+key = fkey.strip('\n')
+inputstr = finputstr.strip('\n')
+atpt = fatpt.strip('\n')
+
+# key = input('API 키 입력 : ')
+# inputstr = input('학교 입력 : ')
+# atpt = input('시도교육청코드 입력 (중복되는 경우만 해당, 아닐시 무시) : ')
+
+url = 'https://open.neis.go.kr/hub/schoolInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
+     + '&SCHUL_NM=' + inputstr + '&ATPT_OFCDC_SC_CODE=' + atpt
 
 content = requests.get(url).content
 dict = xmltodict.parse(content)
 
 try :
     tjsonString = json.dumps(dict['schoolInfo']['head'], ensure_ascii=False)
-    tjsonObj = json.loads(tjsonString) 
+    tjsonObj = json.loads(tjsonString)
 
     if tjsonObj['list_total_count'] > '1' :
-        print('\n여러개의 학교가 감지되었습니다. 이름을 구체적으로 입력하여 주십시오.')
+        print('\n' + tjsonObj['list_total_count'] + '개의 학교가 감지되었습니다. 해당하는 시도교육청코드를 셋업 파일에서 입력 바랍니다.\n')
+
+        tjsonString = json.dumps(dict['schoolInfo']['row'])
+        tjsonObj = json.loads(tjsonString)
+
+        for output in tjsonObj :
+            print(output['ATPT_OFCDC_SC_NM'] + ' : ' + output['ATPT_OFCDC_SC_CODE'])
 
         exit()
     elif tjsonObj['RESULT']['CODE'] != 'INFO-000' :
@@ -67,6 +101,7 @@ print('\n어떤 기능을 사용하시겠습니까?\n')
 print('1. 학교 기본 정보')
 print('2. 급식 식단 정보')
 print('3. 학사 일정')
+print('4. 학교 시간표 (초등학교, 중학교, 고등학교, 특수학교)')
 maininput = input('입력 : ')
 
 if maininput == '1' :
@@ -119,7 +154,7 @@ elif maininput == '2' :
 
         exit()
 
-    print('\n' + schul_nm + '의 ' + mlsv_ymd + '일자 식단표는 다음과 같습니다.')
+    print('\n' + schul_nm + '의 ' + mlsv_ymd + '일자 식단표는 다음과 같습니다.\n')
     fjsonObj['DDISH_NM'] = fjsonObj['DDISH_NM'].replace("<br/>", "\n")
 
     print(fjsonObj['DDISH_NM'])
@@ -151,10 +186,101 @@ elif maininput == '3' :
 
     print('\n' + schul_nm + '의 학사 일정은 다음과 같습니다. (기간 : ' + aa_from_ymd + ' ~ ' + aa_to_ymd + ')\n')
 
-    for output in acjsonObj :
-        print(output['AA_YMD'] + ' : ' + output['EVENT_NM'] + '[' + output['SBTR_DD_SC_NM'] + ']')
+    for acoutput in acjsonObj :
+        print(acoutput['AA_YMD'] + ' : ' + acoutput['EVENT_NM'] + '[' + acoutput['SBTR_DD_SC_NM'] + ']')
 
     exit()
+
+elif maininput == '4' :
+    print('\n\n')
+    print('<기간 입력>\n')
+    all_ti_ymd = input('시간표 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
+
+    print('\n')
+    print('<상세 입력>\n')
+    print('[숫자만 입력 바랍니다.]\n')
+    ay = input('학년도 입력 : ')
+    sem = input('학기 입력 : ')
+    grade = input('학년 입력 : ')
+    class_nm = input('반 입력 : ')
+
+    if schul_knd_sc_nm == '초등학교' :
+        etiurl = 'https://open.neis.go.kr/hub/elsTimetable' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
+            + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&ALL_TI_YMD=' + all_ti_ymd \
+            + '&AY=' + ay + '&SEM=' + sem + '&GRADE=' + grade + '&CLASS_NM=' + class_nm
+
+        try :
+            eticontent = requests.get(etiurl).content
+            etidict = xmltodict.parse(eticontent)
+            etijsonString = json.dumps(etidict['elsTimetable']['row'])
+            etijsonObj = json.loads(etijsonString)
+
+        except KeyError :
+            etiejsonString = json.dumps(etidict['RESULT'])
+            etiejsonObj = json.loads(etiejsonString)
+
+            print(etiejsonObj['MESSAGE'])
+
+            exit()
+
+        print('\n' + schul_nm + '의 ' + all_ti_ymd + '일자 시간표는 다음과 같습니다.')
+        print('(제 ' + ay + '학년도 ' + sem + '학기 ' + grade + '학년 ' + class_nm + '반 시간표)\n')
+        for etioutput in etijsonObj :
+            print(etioutput['PERIO'] + '교시 : ' + etioutput['ITRT_CNTNT'])
+
+        exit()
+
+    elif schul_knd_sc_nm == '중학교' :
+        mtiurl = 'https://open.neis.go.kr/hub/misTimetable' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
+            + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&ALL_TI_YMD=' + all_ti_ymd \
+            + '&AY=' + ay + '&SEM=' + sem + '&GRADE=' + grade + '&CLASS_NM=' + class_nm
+
+        try :
+            mticontent = requests.get(mtiurl).content
+            mtidict = xmltodict.parse(mticontent)
+            mtijsonString = json.dumps(mtidict['misTimetable']['row'])
+            mtijsonObj = json.loads(mtijsonString)
+
+        except KeyError :
+            mtiejsonString = json.dumps(mtidict['RESULT'])
+            mtiejsonObj = json.loads(mtiejsonString)
+
+            print(mtiejsonObj['MESSAGE'])
+
+            exit()
+
+        print('\n' + schul_nm + '의 ' + all_ti_ymd + '일자 시간표는 다음과 같습니다.')
+        print('(제 ' + ay + '학년도 ' + sem + '학기 ' + grade + '학년 ' + class_nm + '반 시간표)\n')
+        for mtioutput in mtijsonObj :
+            print(mtioutput['PERIO'] + '교시 : ' + mtioutput['ITRT_CNTNT'])
+
+        exit()
+
+    elif schul_knd_sc_nm == '고등학교' :
+        htiurl = 'https://open.neis.go.kr/hub/hisTimetable' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
+            + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&ALL_TI_YMD=' + all_ti_ymd \
+            + '&AY=' + ay + '&SEM=' + sem + '&GRADE=' + grade + '&CLASS_NM=' + class_nm
+
+        try :
+            hticontent = requests.get(htiurl).content
+            htidict = xmltodict.parse(hticontent)
+            htijsonString = json.dumps(htidict['hisTimetable']['row'])
+            htijsonObj = json.loads(htijsonString)
+
+        except KeyError :
+            htiejsonString = json.dumps(htidict['RESULT'])
+            htiejsonObj = json.loads(htiejsonString)
+
+            print(htiejsonObj['MESSAGE'])
+
+            exit()
+
+        print('\n' + schul_nm + '의 ' + all_ti_ymd + '일자 시간표는 다음과 같습니다.')
+        print('(제 ' + ay + '학년도 ' + sem + '학기 ' + grade + '학년 ' + class_nm + '반 시간표)\n')
+        for htioutput in htijsonObj :
+            print(htioutput['PERIO'] + '교시 : ' + htioutput['ITRT_CNTNT'])
+
+        exit()
 
 else :
     print('주어진 번호를 입력해주세요')
