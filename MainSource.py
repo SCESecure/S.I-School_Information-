@@ -14,7 +14,7 @@ isactive = f.readline()
 if isactive == 'deactive' :
     print('\n\n[셋업 프로그램에서 입력한 정보들이 존재하지 않습니다. 셋업 프로그램을 실행한 후 본 프로그램을 실행 바랍니다.]\n\n')
 
-    exit()
+    os.system("pause")
 
 print('[S.I(School Information)]\n')
 print('<본 프로그램은 셋업 프로그램에서 입력한 정보들을 바탕으로 실행됩니다. 만약 수정을 원할시 셋업 프로그램을 실행바랍니다.>')
@@ -54,11 +54,11 @@ try :
         for output in tjsonObj :
             print(output['ATPT_OFCDC_SC_NM'] + ' : ' + output['ATPT_OFCDC_SC_CODE'])
 
-        exit()
+        os.system("pause")
     elif tjsonObj['RESULT']['CODE'] != 'INFO-000' :
         print('\n' + tjsonObj['RESULT']['MESSAGE'])
 
-        exit()
+        os.system("pause")
 
 except KeyError :
     ejsonString = json.dumps(dict['RESULT'], ensure_ascii=False)
@@ -66,7 +66,7 @@ except KeyError :
 
     print('\n' + ejsonObj['MESSAGE'])
 
-    exit()
+    os.system("pause")
 
 jsonString = json.dumps(dict['schoolInfo']['row'], ensure_ascii=False)
 jsonObj = json.loads(jsonString)
@@ -132,7 +132,7 @@ if maininput == '1' :
     print('개교기념일 : ' + foas_memrd)
     print('수정일 : ' + load_dtm)
 
-    exit()
+    os.system("pause")
 
 elif maininput == '2' :
     print('\n\n')
@@ -152,14 +152,14 @@ elif maininput == '2' :
 
         print('\n' + fejsonObj['MESSAGE'])
 
-        exit()
+        os.system("pause")
 
     print('\n' + schul_nm + '의 ' + mlsv_ymd + '일자 식단표는 다음과 같습니다.\n')
     fjsonObj['DDISH_NM'] = fjsonObj['DDISH_NM'].replace("<br/>", "\n")
 
     print(fjsonObj['DDISH_NM'])
 
-    exit()
+    os.system("pause")
 
 elif maininput == '3' :
     print('\n\n')
@@ -182,14 +182,14 @@ elif maininput == '3' :
 
         print('\n' + acjsonObj['MESSAGE'])
 
-        exit()
+        os.system("pause")
 
     print('\n' + schul_nm + '의 학사 일정은 다음과 같습니다. (기간 : ' + aa_from_ymd + ' ~ ' + aa_to_ymd + ')\n')
 
     for acoutput in acjsonObj :
         print(acoutput['AA_YMD'] + ' : ' + acoutput['EVENT_NM'] + '[' + acoutput['SBTR_DD_SC_NM'] + ']')
 
-    exit()
+    os.system("pause")
 
 elif maininput == '4' :
     print('\n\n')
@@ -221,14 +221,14 @@ elif maininput == '4' :
 
             print(etiejsonObj['MESSAGE'])
 
-            exit()
+            os.system("pause")
 
         print('\n' + schul_nm + '의 ' + all_ti_ymd + '일자 시간표는 다음과 같습니다.')
         print('(제 ' + ay + '학년도 ' + sem + '학기 ' + grade + '학년 ' + class_nm + '반 시간표)\n')
         for etioutput in etijsonObj :
             print(etioutput['PERIO'] + '교시 : ' + etioutput['ITRT_CNTNT'])
 
-        exit()
+        os.system("pause")
 
     elif schul_knd_sc_nm == '중학교' :
         mtiurl = 'https://open.neis.go.kr/hub/misTimetable' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
@@ -247,14 +247,14 @@ elif maininput == '4' :
 
             print(mtiejsonObj['MESSAGE'])
 
-            exit()
+            os.system("pause")
 
         print('\n' + schul_nm + '의 ' + all_ti_ymd + '일자 시간표는 다음과 같습니다.')
         print('(제 ' + ay + '학년도 ' + sem + '학기 ' + grade + '학년 ' + class_nm + '반 시간표)\n')
         for mtioutput in mtijsonObj :
             print(mtioutput['PERIO'] + '교시 : ' + mtioutput['ITRT_CNTNT'])
 
-        exit()
+        os.system("pause")
 
     elif schul_knd_sc_nm == '고등학교' :
         htiurl = 'https://open.neis.go.kr/hub/hisTimetable' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
@@ -273,16 +273,16 @@ elif maininput == '4' :
 
             print(htiejsonObj['MESSAGE'])
 
-            exit()
+            os.system("pause")
 
         print('\n' + schul_nm + '의 ' + all_ti_ymd + '일자 시간표는 다음과 같습니다.')
         print('(제 ' + ay + '학년도 ' + sem + '학기 ' + grade + '학년 ' + class_nm + '반 시간표)\n')
         for htioutput in htijsonObj :
             print(htioutput['PERIO'] + '교시 : ' + htioutput['ITRT_CNTNT'])
 
-        exit()
+        os.system("pause")
 
 else :
     print('주어진 번호를 입력해주세요')
 
-    exit()
+    os.system("pause")
