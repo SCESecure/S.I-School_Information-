@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import os
 import os.path
 import requests
@@ -192,18 +194,31 @@ elif maininput == '3' :
     os.system("pause")
 
 elif maininput == '4' :
+
     print('\n\n')
     print('<기간 입력>\n')
-    all_ti_ymd = input('시간표 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
+    print("[오늘 날짜일 경우 '1'을 입력 바랍니다.]\n")
+    ti_ymd_input = input('시간표 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
+    if ti_ymd_input == 1 :
+        today = datetime.today().strftime('%Y-%m-%d')
+        all_ti_ymd = today
+    else :
+        all_ti_ymd = ti_ymd_input
 
     print('\n')
     print('<상세 입력>\n')
-    print('[숫자만 입력 바랍니다.]\n')
-    ay = input('학년도 입력 : ')
-    sem = input('학기 입력 : ')
-    grade = input('학년 입력 : ')
-    class_nm = input('반 입력 : ')
-
+    print("[셋업 파일에 입력된 내용을 다루는 걸 원하실 경우 '1'을 그렇지 않을 경우 '2'를 입력바랍니다.]")
+    detail_input = input('입력 : ')
+    if detail_input == 1 :
+        print('')
+    elif detail_input == 2 :
+        print('[숫자만 입력 바랍니다.]\n')
+        ay = input('학년도 입력 : ')
+        sem = input('학기 입력 : ')
+        grade = input('학년 입력 : ')
+        class_nm = input('반 입력 : ')
+    else :
+        print('오류 : 1과 2만 입력 하시길 바랍니다.\n')
     if schul_knd_sc_nm == '초등학교' :
         etiurl = 'https://open.neis.go.kr/hub/elsTimetable' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
             + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&ALL_TI_YMD=' + all_ti_ymd \
