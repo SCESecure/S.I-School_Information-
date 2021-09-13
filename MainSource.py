@@ -107,7 +107,9 @@ print('4. 학교 시간표 (초등학교, 중학교, 고등학교, 특수학교)
 maininput = input('입력 : ')
 
 if maininput == '1' :
-    print('\n\n' + schul_nm + '의 기본적인 정보는 다음과 같습니다.\n')
+    print('\n\n')
+    print('<학급 기본 정보>\n')
+    print(schul_nm + '의 기본적인 정보는 다음과 같습니다.\n')
     print('시도교육청코드 : ' + atpt_ofcdc_sc_code)
     print('시도교육청명 : ' + atpt_ofcdc_sc_nm)
     print('표준학교코드 : ' + sd_schul_code)
@@ -139,7 +141,14 @@ if maininput == '1' :
 
 elif maininput == '2' :
     print('\n\n')
-    mlsv_ymd = input('급식 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
+    print('<급식 식단 정보>\n')
+    print("[만약 오늘 날짜인 경우 '1'을 입력하시길 바랍니다.]\n")
+    mlsvinput = input("입력 (ex : 2000년 1월 1일 -> 20000101) : ")
+    if mlsvinput == '1' :
+        mlsv_ymd = datetime.today().strftime('%Y%m%d')
+    else :
+        mlsv_ymd = mlsvinput
+
     furl = 'https://open.neis.go.kr/hub/mealServiceDietInfo' + '?' + 'Type=xml&pIndex=1&pSize=100' + '&KEY=' + key \
         + '&ATPT_OFCDC_SC_CODE=' + atpt_ofcdc_sc_code + '&SD_SCHUL_CODE=' + sd_schul_code + '&MLSV_YMD=' + mlsv_ymd
 
@@ -168,6 +177,7 @@ elif maininput == '2' :
 
 elif maininput == '3' :
     print('\n\n')
+    print('<학사 일정>\n')
     aa_from_ymd = input('학사 시작 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
     aa_to_ymd = input('학사 종료 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
 
@@ -201,9 +211,10 @@ elif maininput == '3' :
 elif maininput == '4' :
 
     print('\n\n')
+    print('<학교 시간표 (초등학교, 중학교, 고등학교, 특수학교)>\n')
     print('<기간 입력>\n')
     print("[오늘 날짜일 경우 '1'을 입력 바랍니다.]\n")
-    ti_ymd_input = input('시간표 일자 입력(ex : 2000년 1월 1일 -> 20000101) : ')
+    ti_ymd_input = input('입력 (ex : 2000년 1월 1일 -> 20000101) : ')
     if ti_ymd_input == '1' :
         all_ti_ymd = datetime.today().strftime('%Y%m%d')
     else :
