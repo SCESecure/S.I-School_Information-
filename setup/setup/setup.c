@@ -19,7 +19,7 @@ int main() {
 	printf("[S.I(School Information) Setup]\n\n");
 	printf("본 프로그램은 셋업 파일 역할로 사용되므로 최초 한번 실행 또는 기본 내용을 바꾸고 싶을 때 사용하시길 바랍니다.\n\n");
 
-	printf("<API 키가 필요합니다. (나이스 교육정보 개방 포털에서 발급 받을 수 있습니다.)>\n");
+	printf("<API 키가 필요합니다. (나이스 교육정보 개방 포털에서 발급 받을 수 있습니다.)>\n\n");
 	printf("API 키 입력 : ");
 	gets(apikey);
 
@@ -30,18 +30,18 @@ int main() {
 	gets(school_nm);
 
 	printf("\n<시간표 기능 [숫자만 입력]>\n");
-	printf("학년도 입력(ex : 2021학년도) :  ");
+	printf("\n학년도 입력(ex : 2021학년도) :  ");
 	scanf("%d", &ay);
 	
-	printf("학기 입력 : ");
+	printf("\n학기 입력 : ");
 	scanf("%d", &sem);
 	fseek(stdin, 0, SEEK_SET);
 
-	printf("학년 입력 : ");
+	printf("\n학년 입력 : ");
 	scanf("%d", &grade);
 	fseek(stdin, 0, SEEK_SET);
 
-	printf("반 입력 : ");
+	printf("\n반 입력 : ");
 	scanf("%d", &class_nm);
 	fseek(stdin, 0, SEEK_SET);
 
@@ -64,7 +64,13 @@ int main() {
 	fclose(fs1);
 
 	FILE* fs2 = fopen("isactive.json", "w");
-	fputs("active", fs2);
+
+	fprintf(fs2, "{\n");
+	fprintf(fs2, "	\"Activation\": {\n");
+	fprintf(fs2, "		\"isactive\": \"active\"\n");
+	fprintf(fs2, "	}\n");
+	fprintf(fs2, "}");
+
 	fclose(fs2);
 
 	printf("\n셋업 과정을 완료했습니다. 이제 이 프로그램은 종료하셔도 좋습니다. (아무 키 입력)\n");
