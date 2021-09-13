@@ -7,13 +7,8 @@ import xmltodict
 import json
 
 path1 = os.getcwd() + '\\basicfile.json'
-path2 = os.getcwd() + '\\isactive.json'
 
-with open(path2) as f :
-    actjson_data = json.load(f)
-act = actjson_data['Activation']['isactive']
-
-if act == 'deactive' :
+if os.path.isfile(path1) == False :
     print('\n\n[셋업 프로그램에서 입력한 정보들이 존재하지 않습니다. 셋업 프로그램을 실행한 후 본 프로그램을 실행 바랍니다.]\n\n')
 
     os.system("pause")

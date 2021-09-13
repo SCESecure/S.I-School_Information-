@@ -63,16 +63,6 @@ int main() {
 
 	fclose(fs1);
 
-	FILE* fs2 = fopen("isactive.json", "w");
-
-	fprintf(fs2, "{\n");
-	fprintf(fs2, "	\"Activation\": {\n");
-	fprintf(fs2, "		\"isactive\": \"active\"\n");
-	fprintf(fs2, "	}\n");
-	fprintf(fs2, "}");
-
-	fclose(fs2);
-
 	printf("\n셋업 과정을 완료했습니다. 이제 이 프로그램은 종료하셔도 좋습니다. (아무 키 입력)\n");
 
 	key = _getch();
