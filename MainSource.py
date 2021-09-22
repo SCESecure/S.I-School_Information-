@@ -217,7 +217,7 @@ elif maininput == '4' :
 
     print('\n')
     print('<상세 입력>\n')
-    print("[셋업 파일의 날짜에 해당할 경우 '1'을 그렇지 않을 경우 '2'를 입력바랍니다.]")
+    print("[미리 입력하신 정보로 사용하실 경우 '1'을 그렇지 않을 경우 '2'를 입력바랍니다.]")
     detail_input = input('입력 : ')
     if detail_input == '1' :
 
