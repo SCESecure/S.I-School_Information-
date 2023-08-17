@@ -2,8 +2,8 @@ from datetime import datetime
 
 import os
 import os.path
-import requests
-import xmltodict
+import requests 
+import xmltodict 
 import json
 
 path1 = os.getcwd() + '\\basicfile.json'
